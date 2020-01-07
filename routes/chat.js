@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const baseUrl = "/api/chat/";
-const chat = require("../controllers/Chat/ChatController");
-
-router.get(baseUrl + "contact", chat.get_contacts);
-router.post(baseUrl + "contact", chat.save_contact);
+const chat = require("../controllers/ChatController");
 
 router.get(baseUrl + "chatList", chat.get_chatlist);
 router.post(baseUrl + "loadChat", chat.get_chat);
