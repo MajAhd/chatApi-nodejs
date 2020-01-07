@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+var uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   name: {
@@ -27,5 +28,8 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   }
+});
+UserSchema.plugin(uniqueValidator, {
+  message: "`{VALUE}` has been reserved by another user."
 });
 module.exports = mongoose.model("Users", UserSchema);

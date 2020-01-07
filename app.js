@@ -7,12 +7,17 @@ const mongoose = require("mongoose");
 const app = express();
 
 const AuthRoutes = require("./routes/auth");
-const ProfileRoutes = require("./routes/profile");
 const ChatRoutes = require("./routes/chat");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,Post,Delete,PUT,PATCH");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  next();
+});
 app.use(AuthRoutes);
-app.use(ProfileRoutes);
 app.use(ChatRoutes);
 
 app.get("/", (req, res, next) => {
@@ -24,9 +29,17 @@ app.use((req, res, next) => {
 });
 const server = http.createServer(app);
 mongoose
-  .connect("mongodb://localhost:27017/chatService", { useNewUrlParser: true })
+  .connect("mongodb://localhost:27017/chatService", {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(result => {
-    server.listen(3000);
+    const runServer = server.listen(8000);
+    const io = require("socket.io")(runServer);
+    io.on("connection", socket => {
+      console.log("Client Connected!");
+    });
   })
   .catch(err => {
     console.log(err);
