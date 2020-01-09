@@ -3,6 +3,7 @@ const UserTokens = require("../models/user_tokens");
 const bcrypt = require("bcryptjs");
 const TokenGenerator = require("tokgen");
 let Validator = require("validatorjs");
+const io = require("../socket");
 
 exports.signin_users = (req, res, next) => {
   let email = req.body.email.toLowerCase();
@@ -36,7 +37,7 @@ exports.signin_users = (req, res, next) => {
           let token = generator.generate();
           userToken = new UserTokens({
             user_id: user[0]._id,
-            token: token
+            token: Date.now() + token
           });
           userToken
             .save()
@@ -106,11 +107,13 @@ exports.signup_users = (req, res, next) => {
           .save()
           .then(savedUser => {
             // Create User Token For Sign in
+            io.getIO().emit("users", { action: "read_user", user: savedUser });
             let generator = new TokenGenerator({ chars: "0-9a-f", length: 64 });
             let token = generator.generate();
+
             userToken = new UserTokens({
               user_id: savedUser._id,
-              token: token
+              token: Date.now() + token
             });
             userToken
               .save()

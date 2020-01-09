@@ -20,11 +20,8 @@ node.js chat api
 
 - Uer Auth With Phone Number & Email
 - Unique User Name
-- Profile
 - Peer To Peer Chat
 - Attach Photo && Movies && File
-- Group Chat
-- Channel
 - Contacts
 
 ### Web site

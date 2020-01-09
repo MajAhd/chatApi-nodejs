@@ -5,7 +5,7 @@ today = new Date();
 expire = d.setDate(today.getDate() + 90); // set 90 days for token
 const UserTokensSchema = new Schema({
   user_id: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "Users"
   },

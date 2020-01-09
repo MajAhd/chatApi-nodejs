@@ -1,8 +1,31 @@
-module.exports = class Chats {
-  constructor() {}
-  load_chats() {}
-  load_chat() {}
-  save_chat() {}
-  update_chat() {}
-  delete_chat() {}
-};
+const mongoose = require("mongoose");
+var uniqueValidator = require("mongoose-unique-validator");
+const Schema = mongoose.Schema;
+const ChatSchema = new Schema({
+  sender_id: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Users"
+  },
+  reciever_id: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Users"
+  },
+  message: {
+    type: String,
+    required: true
+  },
+  created_at: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now
+  }
+});
+ChatSchema.plugin(uniqueValidator, {
+  message: "`{VALUE}` has been reserved by another user."
+});
+module.exports = mongoose.model("Chats", ChatSchema);
