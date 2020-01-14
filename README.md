@@ -34,4 +34,4 @@ Git :
 
 ### Desktop Application
 
-Git :
+Git : https://github.com/MajAhd/chat-desktop.git
