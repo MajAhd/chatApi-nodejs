@@ -18,10 +18,10 @@ node.js chat api
 
 ## How It Work
 
-- Uer Auth With Phone Number & Email
+- User Auth With Phone Number & Email
 - Unique User Name
 - Peer To Peer Chat
-- Attach Photo && Movies && File
+- Attach Photo && Movies File
 - Contacts
 
 ### Web site

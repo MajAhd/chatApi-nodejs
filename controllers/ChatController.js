@@ -47,6 +47,25 @@ exports.get_chat = (req, res, next) => {
     });
   });
 };
+exports.seen = (req, res, next) => {
+  Chats.updateOne({ _id: req.params.id }, { seen: true })
+    .then(chat => {
+      io.getIO().emit("messages", {
+        action: "read_chat",
+        chat: Chat
+      });
+      res.json({
+        result: true
+      });
+    })
+    .catch(err => {
+      res.json({
+        result: false,
+        msg: "Message Did not Send Please Try Again!",
+        data: err
+      });
+    });
+};
 
 exports.send_message = (req, res, next) => {
   let sender_id = req.body.sender_id;
@@ -74,6 +93,64 @@ exports.send_message = (req, res, next) => {
     sender_id: sender_id,
     reciever_id: reciever_id,
     message: message
+  });
+  Chat.save()
+    .then(() => {
+      io.getIO().emit("messages", { action: "read_chat", chat: Chat });
+      res.json({
+        result: true
+      });
+    })
+    .catch(err => {
+      res.json({
+        result: false,
+        msg: "Message Did not Send Please Try Again!",
+        data: err
+      });
+    });
+};
+
+exports.send_message_media = (req, res, next) => {
+  let sender_id = req.body.sender_id;
+  let reciever_id = req.body.reciever_id;
+  let message = req.body.message;
+  let media = req.file;
+  let media_type = req.body.type;
+
+  if (!media) {
+    res.json({
+      result: false,
+      msg: "File Not Found!"
+    });
+  }
+
+  let validation = new Validator(
+    {
+      sender_id: sender_id,
+      reciever_id: reciever_id,
+      message: message,
+      media_type: media_type
+    },
+    {
+      sender_id: "required",
+      reciever_id: "required",
+      message: "required",
+      media_type: "required"
+    }
+  );
+  validation.fails(() => {
+    res.json({
+      result: false,
+      validations: validation.errors.all()
+    });
+  });
+
+  Chat = new Chats({
+    sender_id: sender_id,
+    reciever_id: reciever_id,
+    message: message,
+    media_type: media_type,
+    media: media.path
   });
   Chat.save()
     .then(() => {

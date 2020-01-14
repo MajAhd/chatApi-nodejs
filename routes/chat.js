@@ -14,5 +14,7 @@ router.get(
 );
 
 router.post(baseUrl + "send", authMiddleware, chat.send_message);
+router.post(baseUrl + "send/media", authMiddleware, chat.send_message_media);
+router.get(baseUrl + "seen/:id", authMiddleware, chat.seen);
 
 module.exports = router;

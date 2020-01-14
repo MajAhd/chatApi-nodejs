@@ -16,6 +16,21 @@ const ChatSchema = new Schema({
     type: String,
     required: true
   },
+  media: {
+    type: String,
+    required: false,
+    default: null
+  },
+  media_type: {
+    type: String,
+    required: false,
+    default: null
+  },
+  seen: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   created_at: {
     type: Date,
     default: Date.now
